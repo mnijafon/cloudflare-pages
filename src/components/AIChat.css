@@ -1,0 +1,14 @@
+/* src/components/AIChat.css */
+@tailwind utilities;
+
+.chat-bubble-user {
+    @apply bg-primary text-white rounded-tl-2xl rounded-tr-none rounded-br-2xl rounded-bl-2xl shadow-lg;
+}
+
+.chat-bubble-ai {
+    @apply bg-white text-neutral-800 rounded-tl-none rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-lg;
+}
+
+.animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
