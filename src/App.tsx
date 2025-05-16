@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
+// eslint-disable-next-line import/extensions,import/no-unresolved
 import AIChat from './components/AIChat';
 
 function App() {
   return (
-      <div className="App">
-        <AIChat />
-      </div>
+  // eslint-disable-next-line react/jsx-filename-extension
+    <div className="App">
+      <AIChat />
+    </div>
   );
 }
 
