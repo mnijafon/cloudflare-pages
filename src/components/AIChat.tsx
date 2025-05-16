@@ -27,25 +27,34 @@ const AIChat: React.FC = () => {
     ];
 
     // 处理用户提交消息
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!userInput.trim()) return;
 
-        // 添加用户消息
-        setMessages(prev => [...prev, { sender: 'user', content: userInput }]);
+        const userMessage = userInput;
+        setMessages(prev => [...prev, { sender: 'user', content: userMessage }]);
         setUserInput('');
-
-        // 显示"正在思考"状态
         setIsThinking(true);
 
-        // 模拟AI回复延迟
-        setTimeout(() => {
-            // 选择随机回复
-            const randomIndex = Math.floor(Math.random() * aiResponses.length);
-            setMessages(prev => [...prev, { sender: 'ai', content: aiResponses[randomIndex] }]);
+        try {
+            const response = await fetch('https://cloudflare-work.liujifeng8106.workers.dev', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: userMessage }),
+            });
+
+            const text = await response.text(); // Worker 返回的是纯文本
+            setMessages(prev => [...prev, { sender: 'ai', content: text }]);
+        } catch (error) {
+            setMessages(prev => [...prev, { sender: 'ai', content: '请求失败，请稍后重试。' }]);
+            console.error('AI 请求失败：', error);
+        } finally {
             setIsThinking(false);
-        }, 1000 + Math.random() * 1000); // 1-2秒的随机延迟
+        }
     };
+
 
     // 处理输入变化
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
