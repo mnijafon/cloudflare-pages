@@ -16,7 +16,7 @@ const CodeReviewPage: React.FC = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch('/code-review', {
+      const res = await fetch('/api/code-review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: codeInput }),
