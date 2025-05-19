@@ -16,7 +16,7 @@ const CodeReviewPage: React.FC = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch('https://my-mastra-app.liujifeng8106.workers.dev/code-review', {
+      const res = await fetch('https://my-mastra-app.liujifeng8106.workers.dev', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: codeInput }),
