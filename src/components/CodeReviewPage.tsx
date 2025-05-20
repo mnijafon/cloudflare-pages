@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 const CodeReviewPage: React.FC = () => {
   const [codeInput, setCodeInput] = useState('');
@@ -10,10 +11,12 @@ const CodeReviewPage: React.FC = () => {
     e.preventDefault();
     setError(null);
     setReviewResult(null);
+
     if (!codeInput.trim()) {
       setError('请输入要审查的代码');
       return;
     }
+
     setLoading(true);
     try {
       const res = await fetch('https://my-mastra-app.liujifeng8106.workers.dev/code-review', {
@@ -21,11 +24,11 @@ const CodeReviewPage: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: codeInput }),
       });
+
       if (!res.ok) throw new Error(`请求失败：${res.status}`);
-      const text = await res.text();
-      setReviewResult(text);
+      const data = await res.json(); // 假设返回的是 { content: string }
+      setReviewResult(data.content);
     } catch (err: any) {
-      console.error(err);
       setError(err.message || '未知错误');
     } finally {
       setLoading(false);
@@ -51,11 +54,14 @@ const CodeReviewPage: React.FC = () => {
           {loading ? '审查中...' : '提交审查'}
         </button>
       </form>
+
       {reviewResult && (
-      <div className="bg-white shadow rounded-lg p-4">
-        <h2 className="text-xl font-semibold mb-2">审查结果：</h2>
-        <pre className="whitespace-pre-wrap text-sm text-neutral-800">{reviewResult}</pre>
-      </div>
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">审查结果：</h2>
+          <div className="prose prose-sm max-w-none text-neutral-800">
+            <ReactMarkdown>{reviewResult}</ReactMarkdown>
+          </div>
+        </div>
       )}
     </div>
   );
